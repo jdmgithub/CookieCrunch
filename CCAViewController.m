@@ -36,6 +36,23 @@
     self.level = [[CCALevel alloc] initWithFile:@"Level_1"];
     self.scene.level = self.level;
     
+    // Load the Tiles.
+    [self.scene addTiles];
+    
+    
+    id block = ^(CCASwap *swap)
+    {
+        self.view.userInteractionEnabled = NO;
+        
+        [self.level performSwap:swap];
+        [self.scene animateSwap:swap completion:^{
+            self.view.userInteractionEnabled = YES;
+        }];
+    };
+    
+    self.scene.swipeHandler = block;
+    
+    
     // Present the scene.
     [skView presentScene:self.scene];
     
