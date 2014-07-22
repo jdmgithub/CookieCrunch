@@ -19,6 +19,7 @@
 -(void)addTiles;
 -(void)addSpritesForCookies:(NSSet *)cookies;
 -(void)animateSwap:(CCASwap *)swap completion:(dispatch_block_t)completion;
+- (void)animateInvalidSwap:(CCASwap *)swap completion:(dispatch_block_t)completion;
 
 
 
