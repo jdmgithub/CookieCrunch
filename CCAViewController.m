@@ -57,7 +57,8 @@
         if ([self.level isPossibleSwap:swap]) {
             [self.level performSwap:swap];
             [self.scene animateSwap:swap completion:^{
-                self.view.userInteractionEnabled = YES;
+//                self.view.userInteractionEnabled = YES;
+                [self handleMatches];
             }];
         } else {
             //self.view.userInteractionEnabled = YES;
@@ -112,6 +113,34 @@
 -(BOOL)prefersStatusBarHidden
 {
     return YES;
+}
+
+
+- (void)handleMatches {
+    NSSet *chains = [self.level removeMatches];
+    
+    if ([chains count] == 0) {
+        [self beginNextTurn];
+        return;
+    }
+    
+    [self.scene animateMatchedCookies:chains completion:^{
+        NSArray *columns = [self.level fillHoles];
+        [self.scene animateFallingCookies:columns completion:^{
+            NSArray *columns = [self.level topUpCookies];
+            [self.scene animateNewCookies:columns completion:^{
+//                self.view.userInteractionEnabled = YES;
+
+            [self handleMatches];
+            }];
+        }];
+    }];
+
+}
+
+- (void)beginNextTurn {
+    [self.level detectPossibleSwaps];
+    self.view.userInteractionEnabled = YES;
 }
 
 @end
